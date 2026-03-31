@@ -1,0 +1,35 @@
+{
+  "name": "listener-assistant-desktop",
+  "version": "1.0.0",
+  "description": "Stock listener assistant desktop UI",
+  "main": "electron/main.js",
+  "scripts": {
+    "ui:install": "npm install --prefix react-ui",
+    "ui:build": "npm run build --prefix react-ui",
+    "start": "npm run ui:build && electron .",
+    "build": "npm run ui:build && electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.stitchwork.listenerassistant",
+    "productName": "StockListenerAssistant",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "react-ui/dist/**/*",
+      "node_modules/pytdx/**/*",
+      "node_modules/holidays/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  },
+  "devDependencies": {
+    "electron": "^41.1.0",
+    "electron-builder": "^26.0.12"
+  }
+}

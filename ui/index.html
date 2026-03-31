@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>金融视界 - 股票监听助手</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-bg-decoration app-bg-decoration-right"></div>
+  <div class="app-bg-decoration app-bg-decoration-left"></div>
+
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand-zone">
+        <span class="brand-mark">金融视界</span>
+        <nav class="nav-tabs">
+          <button class="nav-tab is-active" data-page="dashboard">核心看板</button>
+          <button class="nav-tab" data-page="signals">信号监控</button>
+          <button class="nav-tab" data-page="rules">策略研究</button>
+        </nav>
+      </div>
+
+      <div class="status-zone">
+        <div class="status-pill status-pill-live">
+          <span class="status-dot"></span>
+          <span>运行中</span>
+        </div>
+        <div class="status-item">
+          <span class="material-symbols-outlined">wifi</span>
+          <span>连接正常</span>
+        </div>
+        <div class="status-item">
+          <span class="material-symbols-outlined">schedule</span>
+          <span id="current-time">14:30:05</span>
+        </div>
+        <button class="topbar-action" id="top-add-button">添加监控</button>
+        <div class="avatar-ring">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW58yR7_Lnl6GRmQIIl-bI9slaFAQ4zc4OK0y7h2dNihvZh5ooqzjjL3tDZnJnBdcRIg7n99soCXCwhAOLu4nWgYqA_7KRWJ_dQOz2V280RKOnIftaPSdkGqGVgEMGNJs4pAHcscR-pFPm9oPGSPT5o9ufv3XEHD5FfEv_R5rWd4roIRbJ00edcfIOaaR8IU0eU12GqNiJeTme5FXRGtJ1aCrkZwUK98ysFk-3WDnsOnjlCh0vZ8GBGQ99RdF_X_uBZ3EzFwNtwELG" alt="用户头像" />
+        </div>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="page page-dashboard is-visible" data-page="dashboard">
+        <div class="page-headline">
+          <h1>股票监听助手</h1>
+          <p>实时监控市场动态，精准捕获多维度交易信号</p>
+        </div>
+
+        <section class="hero-grid">
+          <article class="hero-card">
+            <div>
+              <p class="eyebrow">Today Overview</p>
+              <h2>18 条有效信号</h2>
+              <p class="hero-copy">聚焦突破预警、均线金叉、卖出提醒和量能异常，形成更可执行的盘中监控视图。</p>
+            </div>
+            <div class="hero-badge">
+              <span>扫描轮次</span>
+              <strong>06</strong>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <span class="metric-label">买入信号</span>
+            <strong class="metric-value">11</strong>
+            <p class="metric-note metric-note-positive">较上一轮 +3</p>
+          </article>
+
+          <article class="metric-card">
+            <span class="metric-label">风险信号</span>
+            <strong class="metric-value">04</strong>
+            <p class="metric-note metric-note-danger">新能源波动显著</p>
+          </article>
+
+          <article class="metric-card">
+            <span class="metric-label">刷新频率</span>
+            <strong class="metric-value">30s</strong>
+            <p class="metric-note">桌面端实时推送</p>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <div class="panel signal-panel">
+            <div class="panel-head">
+              <div>
+                <h2>实时信号列表</h2>
+                <p>兼容你给的表格稿，强调行扫描与状态色块</p>
+              </div>
+              <div class="filter-row">
+                <button class="chip is-active">全部信号</button>
+                <button class="chip">仅查看预警</button>
+              </div>
+            </div>
+
+            <div class="signal-table-wrap custom-scrollbar">
+              <table class="signal-table">
+                <thead>
+                  <tr>
+                    <th>代码</th>
+                    <th>名称</th>
+                    <th>信号类型</th>
+                    <th>触发时间</th>
+                    <th class="align-right">当前状态</th>
+                  </tr>
+                </thead>
+                <tbody id="signal-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="table-foot">
+              <p>展示最近 5 条信号记录</p>
+              <button class="table-link">查看所有信号记录 →</button>
+            </div>
+          </div>
+
+          <aside class="side-stack">
+            <section class="panel side-panel">
+              <div class="panel-head compact">
+                <div>
+                  <h3>监听状态</h3>
+                  <p>引擎活跃，队列响应正常</p>
+                </div>
+                <span class="inline-tag inline-tag-live">Active</span>
+              </div>
+              <div class="info-list">
+                <div class="info-item"><span>监听市场</span><strong>沪深 A 股</strong></div>
+                <div class="info-item"><span>策略组合</span><strong>MACD + 背离</strong></div>
+                <div class="info-item"><span>通知方式</span><strong>桌面弹窗</strong></div>
+              </div>
+            </section>
+
+            <section class="panel side-panel">
+              <div class="panel-head compact">
+                <div>
+                  <h3>系统日志</h3>
+                  <p>最近 5 条事件</p>
+                </div>
+              </div>
+              <div id="log-list" class="log-list"></div>
+            </section>
+          </aside>
+        </section>
+
+        <footer class="footer-meta">
+          <div class="meta-row">
+            <span>Security Level 4</span>
+            <span>Low Latency Engine v2.4</span>
+            <span>Encrypted Connection</span>
+          </div>
+          <p>© 2024 金融视界 · 投资有风险，入市需谨慎</p>
+        </footer>
+      </section>
+
+      <section class="page page-signals" data-page="signals">
+        <div class="page-headline">
+          <h1>信号监控</h1>
+          <p>高密度实时流列表，突出证券代码、涨跌状态与触发时刻。</p>
+        </div>
+        <div class="panel monitor-panel">
+          <div class="monitor-header-row">
+            <span>证券代码</span>
+            <span>证券名称</span>
+            <span>最新价格</span>
+            <span>当日涨幅</span>
+            <span>信号类型</span>
+            <span>触发时间</span>
+          </div>
+          <div id="monitor-list" class="monitor-list"></div>
+        </div>
+      </section>
+
+      <section class="page page-rules" data-page="rules">
+        <div class="page-headline">
+          <h1>策略配置</h1>
+          <p>设置您的自动化监听规则，系统将在触发条件时实时推送通知。</p>
+        </div>
+
+        <div class="rules-stack">
+          <section class="panel rule-card">
+            <div class="rule-topbar">
+              <div class="rule-title-group">
+                <div class="rule-icon rule-icon-primary">
+                  <span class="material-symbols-outlined">analytics</span>
+                </div>
+                <div>
+                  <h2>MACD策略</h2>
+                  <p>MACD Strategy</p>
+                </div>
+              </div>
+              <label class="switch-row">
+                <input type="checkbox" id="macd-enabled" checked />
+                <span class="switch-visual"></span>
+                <span>启用策略</span>
+              </label>
+            </div>
+
+            <div class="rule-grid two-col">
+              <div class="field-group">
+                <label>当日涨幅阈值</label>
+                <div class="slider-row">
+                  <input id="macd-range" type="range" min="0" max="20" step="0.5" value="5" />
+                  <div class="percent-input">
+                    <input id="macd-value" type="text" value="> 5.0" />
+                    <span>%</span>
+                  </div>
+                </div>
+                <p>当个股当日涨幅超过此百分比时触发监控。</p>
+              </div>
+
+              <div class="field-group">
+                <label>零轴穿透模式</label>
+                <select id="macd-mode">
+                  <option>从下方金叉穿过</option>
+                  <option>零轴上方二次金叉</option>
+                  <option>快速DIF回踩DEA</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel rule-card">
+            <div class="rule-topbar">
+              <div class="rule-title-group">
+                <div class="rule-icon rule-icon-tertiary">
+                  <span class="material-symbols-outlined">compare_arrows</span>
+                </div>
+                <div>
+                  <h2>背离策略</h2>
+                  <p>Divergence Strategy</p>
+                </div>
+              </div>
+              <label class="switch-row">
+                <input type="checkbox" id="divergence-enabled" />
+                <span class="switch-visual"></span>
+                <span>启用策略</span>
+              </label>
+            </div>
+
+            <div class="rule-grid two-col">
+              <div class="field-group">
+                <label>背离周期确认</label>
+                <div class="segmented-row" id="period-switches">
+                  <button data-period="5分钟">5分钟</button>
+                  <button class="is-active" data-period="15分钟">15分钟</button>
+                  <button data-period="30分钟">30分钟</button>
+                  <button data-period="日线">日线</button>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label>当日涨幅限制</label>
+                <div class="single-input-wrap">
+                  <input id="divergence-limit" type="text" placeholder="输入限制百分比" />
+                  <span>%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="insight-grid">
+              <article class="insight-card insight-card-tertiary">
+                <span>价格指标</span>
+                <strong>Lower Low (新低)</strong>
+              </article>
+              <article class="insight-card insight-card-primary">
+                <span>动量指标</span>
+                <strong>Higher Low (抬高)</strong>
+              </article>
+              <article class="insight-card insight-card-error">
+                <span>偏离阈值</span>
+                <strong>12.5%</strong>
+              </article>
+            </div>
+          </section>
+
+          <div class="rules-tip">
+            <span class="material-symbols-outlined">info</span>
+            <p>提示：多条策略同时启用时，系统将并行监控并分别推送满足条件的标的。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <button id="floating-button" class="floating-action-button">
+      <span class="material-symbols-outlined">add</span>
+      <span id="floating-button-label">添加</span>
+    </button>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <div id="modal-root" class="modal-root hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>添加股票监听</h3>
+        <button class="icon-button" id="modal-close-button">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="field-group compact-gap">
+          <label>股票代码</label>
+          <div class="search-input-shell">
+            <span class="material-symbols-outlined">search</span>
+            <input id="stock-code-input" type="text" placeholder="请输入股票代码 (例如: 600519)" autofocus />
+          </div>
+          <p>请输入沪深/港股/美股代码。系统将自动识别市场并加载实时 K 线数据及预警算法。</p>
+        </div>
+
+        <div class="modal-grid">
+          <div class="field-group compact-gap">
+            <label>股票名称</label>
+            <input id="stock-name-input" type="text" placeholder="例如：贵州茅台" />
+          </div>
+          <div class="field-group compact-gap">
+            <label>信号类型</label>
+            <select id="signal-type-input">
+              <option>突破预警</option>
+              <option>均线金叉</option>
+              <option>卖出提醒</option>
+              <option>量能突增</option>
+            </select>
+          </div>
+          <div class="field-group compact-gap">
+            <label>最新价格</label>
+            <input id="stock-price-input" type="text" placeholder="例如：1745.00" />
+          </div>
+          <div class="field-group compact-gap">
+            <label>当前状态</label>
+            <select id="stock-status-input">
+              <option>监听中</option>
+              <option>待确认</option>
+              <option>已买入</option>
+              <option>高风险</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary-button" id="modal-cancel-button">取消</button>
+        <button class="primary-button" id="modal-confirm-button">确认添加</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

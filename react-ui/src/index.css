@@ -1,0 +1,38 @@
+:root {
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2b3438;
+  background: #f8f9fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(19, 83, 216, 0.08), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(0, 109, 74, 0.08), transparent 20%),
+    linear-gradient(180deg, #f6f8fb 0%, #f8f9fb 100%);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
