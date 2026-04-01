@@ -390,28 +390,54 @@
 }
 
 .signal-filters {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
-.filter-btn {
-  border: 0;
-  border-radius: 8px;
-  background: #eaeef2;
-  color: #586065;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 8px 12px;
-  cursor: pointer;
+.stock-filter-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
 }
 
-.filter-btn:hover {
-  background: #e2e9ee;
-}
-
-.filter-btn.active {
-  background: var(--blue-soft);
-  color: var(--blue-strong);
+.stock-filter-shell span {
+  color: var(--text-muted);
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stock-filter-shell select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-height: 38px;
+  border: 1px solid rgba(210, 220, 228, 0.9);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  background-image: linear-gradient(45deg, transparent 50%, #6b7280 50%), linear-gradient(135deg, #6b7280 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 12px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 32px 0 12px;
+  outline: none;
+  box-shadow: 0 6px 16px rgba(30, 48, 77, 0.05);
+}
+
+.stock-filter-shell select:focus {
+  border-color: rgba(19, 83, 216, 0.4);
+  box-shadow: 0 0 0 4px rgba(19, 83, 216, 0.08);
+}
+
+.date-filter-shell {
+  min-width: 180px;
 }
 
 .signal-card,
@@ -434,11 +460,13 @@
 
 .signal-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
 .signal-table thead th {
-  padding: 13px 22px;
+  width: 16.666%;
+  padding: 14px 14px;
   background: rgba(241, 244, 247, 0.62);
   color: var(--text-muted);
   font-size: 10px;
@@ -446,10 +474,6 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   text-align: left;
-}
-
-.signal-table thead th:last-child {
-  padding-right: 24px;
 }
 
 .signal-table tbody tr {
@@ -462,18 +486,30 @@
 }
 
 .signal-table td {
-  padding: 15px 22px;
+  width: 16.666%;
+  padding: 16px 14px;
   font-size: 12px;
   line-height: 1.2;
+  vertical-align: middle;
 }
 
-.signal-table td:last-child {
-  padding-right: 24px;
+.signal-table .center {
+  text-align: center;
 }
 
 .signal-table td.right,
 .signal-table th.right {
   text-align: right;
+}
+
+.signal-table .positive {
+  color: var(--red-main);
+  font-weight: 700;
+}
+
+.signal-table .negative {
+  color: var(--green-main);
+  font-weight: 700;
 }
 
 .code {
@@ -506,11 +542,13 @@
 .badge {
   padding: 5px 9px;
   border-radius: 7px;
+  justify-content: center;
+  max-width: 100%;
 }
 
 .badge.buy {
-  background: var(--green-soft);
-  color: var(--green-main);
+  background: var(--red-soft);
+  color: var(--red-main);
 }
 
 .badge.neutral {
@@ -519,8 +557,8 @@
 }
 
 .badge.sell {
-  background: var(--red-soft);
-  color: var(--red-main);
+  background: var(--green-soft);
+  color: var(--green-main);
 }
 
 .status::before {
@@ -674,6 +712,11 @@
 .rule-icon.tertiary {
   background: rgba(105, 246, 184, 0.22);
   color: #005a3c;
+}
+
+.rule-icon.red {
+  background: rgba(255, 111, 111, 0.16);
+  color: #b42318;
 }
 
 .toggle-row {
@@ -897,6 +940,112 @@
   font-weight: 700;
 }
 
+.watchlist-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.watchlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: rgba(241, 244, 247, 0.72);
+  border: 1px solid rgba(226, 233, 238, 0.88);
+}
+
+.watchlist-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.watchlist-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.watchlist-title-row strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.watchlist-title-row span {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.watchlist-main p {
+  margin: 0;
+  font-size: 13px;
+  color: #586065;
+}
+
+.empty-watchlist {
+  padding: 28px 20px;
+  border-radius: 14px;
+  background: rgba(241, 244, 247, 0.72);
+  border: 1px dashed rgba(210, 220, 228, 0.9);
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.danger-btn {
+  border: 0;
+  min-width: 96px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(180, 35, 24, 0.08);
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.danger-btn:hover {
+  background: rgba(180, 35, 24, 0.14);
+}
+
+.danger-btn.solid {
+  background: #b42318;
+  color: #fff;
+}
+
+.danger-btn.solid:hover {
+  background: #991b1b;
+}
+
+.confirm-card {
+  max-width: 480px;
+}
+
+.confirm-content p {
+  margin: 0;
+  color: #586065;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .watchlist-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .danger-btn {
+    width: 100%;
+  }
+}
+
 .fab {
   position: fixed;
   right: 40px;
@@ -1015,17 +1164,16 @@
 
 .search-shell {
   gap: 12px;
-  height: 54px;
-  border-radius: 16px;
-  padding: 0 15px;
-  background: #eaeef2;
-  border: 1px solid #e2e9ee;
+  height: auto;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
   transition: box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .search-shell:focus-within {
-  border-color: rgba(19, 83, 216, 0.3);
-  box-shadow: 0 0 0 4px rgba(19, 83, 216, 0.12);
+  box-shadow: none;
 }
 
 .search-icon {
@@ -1035,12 +1183,21 @@
 
 .search-shell input {
   flex: 1;
+  width: auto;
   border: 0;
   background: transparent;
+  box-shadow: none;
+  border-radius: 0;
   padding: 0;
-  height: auto;
+  min-width: 0;
+  height: 100%;
   font-size: 14px;
   font-weight: 500;
+}
+
+.search-shell input:focus {
+  background: transparent;
+  box-shadow: none;
 }
 
 .cancel-btn,
@@ -1155,6 +1312,13 @@
   border-radius: 14px;
   font-size: 14px;
   background: #f1f4f7;
+}
+
+.modal-content .field-block.tight .search-shell input {
+  height: 100%;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .modal-actions {

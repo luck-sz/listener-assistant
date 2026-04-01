@@ -2,11 +2,14 @@ node_modules/
 dist/
 build/
 release/
+runtime/
 build_launcher/
 build_launcher2/
 build_launcher3/
 build_launcher4/
 __pycache__/
+electron/__pycache__/
+electron/backend/__pycache__/
 *.pyc
 *.pyo
 *.pyd

@@ -2,27 +2,22 @@
 
 监听助手桌面应用源码仓库。
 
-这是一个基于 `Electron + React` 的股票监听助手原型项目，目标是提供接近设计稿的桌面端界面，并接入最近 30 个交易日的分时数据抓取与信号分析逻辑。
+这是一个基于 `Electron + React` 的股票监听助手项目，目标是提供桌面端信号监控、策略配置和监听管理能力，并接入分时数据抓取与信号分析逻辑。
 
 ## 当前状态
 
 - 已完成桌面端基础壳：`Electron + React`
-- 已完成主要页面：`信号监控`、`策略研究`、`添加股票监听` 弹窗
+- 已完成主要页面：`信号监控`、`策略研究`、`监听列表`、`添加股票监听` 弹窗
 - 已接入参考项目的数据抓取与信号计算逻辑
-- 已支持运行时快照文件：`runtime/live_snapshot.json`
-- 已有桌面启动器源码：`launcher.py`
+- 已支持运行时快照与本地持久化运行目录
 
-目前“添加股票监听 -> 下载 30 日分时 -> 自动回写列表”这条链路仍在继续排查和打磨，仓库已包含最新调试代码与日志入口。
+目前已支持 `1分钟 / 5分钟` 周期切换，并可在切换后重新生成信号列表。
 
 ## 目录结构
 
 ```text
 electron/          Electron 主进程、preload、Python 数据服务
 react-ui/          React 前端界面
-ui/                早期静态页面资源
-img/               设计参考图
-launcher.py        启动器源码
-main.py            早期桌面端入口
 package.json       根级 Electron 项目配置
 requirements.txt   Python 依赖
 ```
@@ -68,12 +63,12 @@ npm run build
 
 ## 运行时文件
 
-应用运行过程中会在运行目录下生成 `runtime/` 数据目录，常见文件包括：
+应用运行过程中会在本地目录 `C:\Users\<用户名>\AppData\Roaming\StockListenerAssistant\runtime` 生成运行时文件，常见文件包括：
 
-- `runtime/live_snapshot.json`
-- `runtime/watchlist.json`
-- `runtime/desktop_debug.log`
-- `runtime/preload_debug.log`
+- `live_snapshot.json`
+- `watchlist.json`
+- `desktop_debug.log`
+- `preload_debug.log`
 
 这些文件主要用于：
 
@@ -93,13 +88,7 @@ npm run build
 - `live_divergence_incremental.py`
 - `web_app.py`
 
-## 已知问题
-
-- 添加股票监听链路仍在持续修复与验证
-- 部分时间格式展示仍需要进一步清理
-- Windows 打包链路目前以本地可运行目录和启动器方式为主，正式 portable 包流程还需要继续稳定
-
 ## 仓库说明
 
-- 本仓库当前不包含 `dist/` 运行包
-- 仅提交源码、素材和配置文件
+- 本仓库建议仅提交源码与必要配置文件
+- `release/`、`build/`、`runtime/`、`node_modules/` 等目录已加入忽略规则，不建议提交到 GitHub

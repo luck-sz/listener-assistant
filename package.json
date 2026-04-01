@@ -15,6 +15,16 @@
     "directories": {
       "output": "release"
     },
+    "extraResources": [
+      {
+        "from": "electron/data_service.py",
+        "to": "python/data_service.py"
+      },
+      {
+        "from": "electron/backend",
+        "to": "python/backend"
+      }
+    ],
     "files": [
       "electron/**/*",
       "react-ui/dist/**/*",
