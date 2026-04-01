@@ -42,6 +42,7 @@ function loadSavedRules() {
         ...DEFAULT_RULES.signals,
         ...(parsed.signals || {}),
       },
+      period: parsed.period || DEFAULT_RULES.period,
       limit: parsed.limit || DEFAULT_RULES.limit,
     }
   } catch {
@@ -114,6 +115,15 @@ function App() {
       }
     }
 
+    loadRules()
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let mounted = true
+
     const loadSnapshot = async () => {
       if (!window.listenerAssistant?.readSnapshot) {
         return
@@ -138,7 +148,6 @@ function App() {
       }
     }
 
-    loadRules()
     loadSnapshot()
     const refreshInterval = rows.some((row) => row.signal === '正在下载最新7个交易日分时数据') ? 3000 : 30000
     const timer = window.setInterval(loadSnapshot, refreshInterval)
@@ -202,6 +211,30 @@ function App() {
       return
     }
     setToast('规则配置已保存')
+  }
+
+  const applyPeriodChange = async (nextPeriod) => {
+    if (nextPeriod === period) {
+      return
+    }
+
+    setPeriod(nextPeriod)
+    const payload = { signals: ruleSignals, period: nextPeriod, limit }
+    window.localStorage.setItem(RULES_STORAGE_KEY, JSON.stringify(payload))
+
+    const result = await window.listenerAssistant?.saveRulesConfig?.(payload)
+    if (result && result.ok === false) {
+      setToast(result.message || '周期切换保存失败')
+      return
+    }
+
+    const regenerateResult = await window.listenerAssistant?.regenerateSignals?.()
+    if (regenerateResult && regenerateResult.ok === false) {
+      setToast(regenerateResult.message || '周期切换后重建失败')
+      return
+    }
+
+    setToast(`已切换到${nextPeriod}并开始重建信号`)
   }
 
   const toggleRuleSignal = (signalName) => {
@@ -505,12 +538,12 @@ function App() {
                 <div className="rule-grid">
                   <div className="field-block">
                     <label>MACD 计算周期</label>
-                    <div className="period-row">
-                      {['1分钟', '5分钟'].map((item) => (
-                        <button key={item} type="button" className={`period ${period === item ? 'active' : ''}`} onClick={() => setPeriod(item)}>{item}</button>
+                      <div className="period-row">
+                        {['1分钟', '5分钟'].map((item) => (
+                        <button key={item} type="button" className={`period ${period === item ? 'active' : ''}`} onClick={() => { applyPeriodChange(item) }}>{item}</button>
                       ))}
+                      </div>
                     </div>
-                  </div>
                 </div>
               </div>
             </section>

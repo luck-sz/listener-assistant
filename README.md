@@ -1,26 +1,30 @@
 # Listener Assistant
 
-监听助手桌面应用源码仓库。
+一个基于 `Electron + React + Python` 的桌面股票监听工具，用来管理监听股票、生成分时级别 MACD / 背离信号，并在桌面端集中查看信号列表。
 
-这是一个基于 `Electron + React` 的股票监听助手项目，目标是提供桌面端信号监控、策略配置和监听管理能力，并接入分时数据抓取与信号分析逻辑。
+## 项目特性
 
-## 当前状态
+- 桌面端实时信号监控界面，支持股票筛选与日期筛选
+- 支持 `1分钟` / `5分钟` 周期切换，并在切换后重新生成信号列表
+- 支持监听股票本地持久化，重启应用后自动恢复
+- 支持监听列表管理，可直接删除不再需要的监听项
+- 支持策略配置：启用/关闭不同信号类型、设置涨幅限制
+- 使用本地运行时目录保存快照、监听列表、调试日志和信号缓存
 
-- 已完成桌面端基础壳：`Electron + React`
-- 已完成主要页面：`信号监控`、`策略研究`、`监听列表`、`添加股票监听` 弹窗
-- 已接入参考项目的数据抓取与信号计算逻辑
-- 已支持运行时快照与本地持久化运行目录
+## 当前页面
 
-目前已支持 `1分钟 / 5分钟` 周期切换，并可在切换后重新生成信号列表。
-
-## 目录结构
-
-```text
-electron/          Electron 主进程、preload、Python 数据服务
-react-ui/          React 前端界面
-package.json       根级 Electron 项目配置
-requirements.txt   Python 依赖
-```
+- `信号监控`
+  - 查看信号列表
+  - 按股票筛选
+  - 按日期筛选
+  - 查看价格、涨幅、触发时间和信号类型
+- `策略研究`
+  - 启用或关闭具体信号策略
+  - 切换 `1分钟 / 5分钟` 周期
+  - 保存规则后自动重建信号列表
+- `监听列表`
+  - 查看当前已监听股票
+  - 删除监听股票
 
 ## 技术栈
 
@@ -30,9 +34,19 @@ requirements.txt   Python 依赖
 - Python
 - pytdx
 
+## 项目结构
+
+```text
+electron/          Electron 主进程、preload、Python 数据服务
+react-ui/          React 前端页面
+package.json       Electron 项目配置与构建脚本
+requirements.txt   Python 依赖说明
+README.md          项目说明
+```
+
 ## 本地开发
 
-### 1. 安装前端依赖
+### 1. 安装 Node.js 依赖
 
 ```bash
 npm install
@@ -51,44 +65,60 @@ python -m pip install -r requirements.txt
 npm run start
 ```
 
-这个命令会先构建 `react-ui`，再用 Electron 启动桌面端。
+这个命令会先构建 `react-ui`，然后启动 Electron 桌面应用。
 
-## 构建
+## 构建 Windows 可执行文件
 
 ```bash
 npm run build
 ```
 
-默认构建目标在 `package.json` 中配置为 Windows portable 包，输出目录为 `release/`。
+构建完成后，输出文件位于：
 
-## 运行时文件
+```text
+release/StockListenerAssistant 1.0.0.exe
+```
 
-应用运行过程中会在本地目录 `C:\Users\<用户名>\AppData\Roaming\StockListenerAssistant\runtime` 生成运行时文件，常见文件包括：
+## 运行时目录
 
-- `live_snapshot.json`
-- `watchlist.json`
-- `desktop_debug.log`
-- `preload_debug.log`
+应用运行时会在当前用户目录下生成本地运行数据：
 
-这些文件主要用于：
+```text
+C:\Users\<用户名>\AppData\Roaming\StockListenerAssistant\runtime
+```
 
-- 前端读取实时快照
-- 记录监控股票列表
-- 排查主进程 / preload 层的请求问题
+常见文件包括：
 
-## 参考项目
+- `live_snapshot.json`：前端读取的实时快照
+- `watchlist.json`：当前监听股票列表
+- `rules_config.json`：策略配置与周期设置
+- `desktop_debug.log`：主进程日志
+- `preload_debug.log`：preload 日志
+- `*_1m_signals.csv` / `*_5m_signals.csv`：按周期生成的信号文件
 
-数据抓取与信号逻辑参考：
+## 使用流程
+
+1. 打开桌面应用
+2. 点击右上角 `添加监控`
+3. 输入股票代码，等待最近 7 个交易日分时数据下载完成
+4. 在 `策略研究` 页面选择周期和启用的信号类型
+5. 返回 `信号监控` 页面查看结果
+6. 如需清理监听股票，可在 `监听列表` 页面删除
+
+## 说明
+
+- 当前仓库提交的是源码，不建议提交 `release/`、`build/`、`runtime/`、`node_modules/` 等运行产物
+- 项目已经配置 `.gitignore`，适合直接托管到 GitHub
+- 当前主链路是 `Electron + React`，旧的静态页面和 PyInstaller 链路已经清理
+
+## 参考
+
+数据抓取与信号逻辑参考自本地 Python 项目：
 
 - `E:\PythonProject\stock_intraday_fetch`
 
-核心参考文件包括：
+如果你准备继续把这个仓库公开化，下一步建议补充：
 
-- `fetch_tdx_intraday_30d.py`
-- `live_divergence_incremental.py`
-- `web_app.py`
-
-## 仓库说明
-
-- 本仓库建议仅提交源码与必要配置文件
-- `release/`、`build/`、`runtime/`、`node_modules/` 等目录已加入忽略规则，不建议提交到 GitHub
+- 项目截图
+- LICENSE
+- Roadmap / TODO
